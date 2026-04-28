@@ -199,32 +199,31 @@ int8_t QMC5883L::isDataMissed(){
     return status & QMC5883L_DOR_STATUS;
 }
 
-bool QMC5883L::get_rawReadings(int16_t (&buf)[3]){
+bool QMC5883L::get_rawReadings(int16_t& x, int16_t& y, int16_t& z){
     uint8_t temp[6];
     
-    // read all data from data output registers
     if (!i2c_readBytes(QMC5883L_OUT_X_LSB_REG, 6, temp))
-        return 0;
+        return false;
     
-    buf[0] = (int16_t)(((uint16_t)temp[1] << 8) | temp[0]);
-    buf[1] = (int16_t)(((uint16_t)temp[3] << 8) | temp[2]);
-    buf[2] = (int16_t)(((uint16_t)temp[5] << 8) | temp[4]);
+    x = (int16_t)(((uint16_t)temp[1] << 8) | temp[0]);
+    y = (int16_t)(((uint16_t)temp[3] << 8) | temp[2]);
+    z = (int16_t)(((uint16_t)temp[5] << 8) | temp[4]);
 
-    return 1;
+    return true;
 }
 
-bool QMC5883L::get_magneticField_uT(float (&buf)[3]){
+bool QMC5883L::get_magneticField_uT(float& x, float& y, float& z){
 
-    int16_t raw_readings[3];
+    int16_t raw_x, raw_y, raw_z;
 
-    if (!get_rawReadings(raw_readings))
-        return 0;
+    if (!get_rawReadings(raw_x, raw_y, raw_z))
+        return false;
 
-    buf[0] = raw_readings[0] * mg_per_lsb;
-    buf[1] = raw_readings[1] * mg_per_lsb;
-    buf[2] = raw_readings[2] * mg_per_lsb;
+    x = raw_x * mg_per_lsb;
+    y = raw_y * mg_per_lsb;
+    z = raw_z * mg_per_lsb;
 
-    return 1;
+    return true;
 }
 
 // I2C routines

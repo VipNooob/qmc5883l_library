@@ -94,6 +94,6 @@ class QMC5883L{
         int8_t isOverflowed();
         int8_t isDataMissed();
 
-        bool get_rawReadings(int16_t (&buf)[3]);
-        bool get_magneticField_uT(float (&buf)[3]);
+        bool get_rawReadings(int16_t& x, int16_t& y, int16_t& z);
+        bool get_magneticField_uT(float& x, float& y, float& z);
 };

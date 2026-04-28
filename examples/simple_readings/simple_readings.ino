@@ -3,7 +3,7 @@
 
 
 QMC5883L magnetometer;
-float magnetic_field[3];
+float mag_x, mag_y, mag_z;
 
 void setup() {
   Serial.begin(9600);
@@ -25,12 +25,12 @@ void setup() {
 
 void loop() {
   if (magnetometer.isReady() and (!magnetometer.isOverflowed())){
-    magnetometer.get_magneticField_uT(magnetic_field);
+    magnetometer.get_magneticField_uT(mag_x, mag_y, mag_z);
   }
   
-  Serial.print(magnetic_field[0]); Serial.print(" ");
-  Serial.print(magnetic_field[1]); Serial.print(" ");
-  Serial.println(magnetic_field[2]);
+  Serial.print(mag_x); Serial.print(" ");
+  Serial.print(mag_y); Serial.print(" ");
+  Serial.println(mag_z);
 
   delay(100);
 }
